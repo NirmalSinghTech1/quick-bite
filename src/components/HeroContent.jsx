@@ -6,7 +6,7 @@ export default function HeroContent() {
           Every Bite Packed <br /> with Flavor
         </h1>
         <button className="mt-8 text-lg tracking-wide border-2 backdrop-blur-sm hover:bg-red-700/80 active:bg-red-700/50 transition-colors duration-200 cursor-pointer py-2 px-5 rounded-lg text-shadow-md">
-          Take a Bite
+          <a href="#main">Take a Bite</a>
         </button>
       </div>
     </section>

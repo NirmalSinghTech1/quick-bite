@@ -17,6 +17,20 @@ p, h1 {
   --font-raleway: "Raleway", sans-serif;
 }
 
+@keyframes SlideIn {
+  from {
+    transform: translateY(-15px);
+    opacity: 0;
+    display: none;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+    display: block;
+  }
+}
+
   /* 
 
 /* --text: #6b6375;
