@@ -1,12 +1,22 @@
+import { forwardRef } from "react";
 import { createPortal } from "react-dom";
 
-export default function CartModal({
-  children,
-  dialogState,
-  closeBtn = false,
-  onDialogStateChange,
-  ref
-}) {
+const CartModal = forwardRef(function CartModal(
+  {
+    children,
+    dialogState,
+    closeBtn = false,
+    onDialogStateChange,
+    hasCartItems,
+  },
+  ref,
+) {
+  const title =
+    dialogState === "cart"
+      ? `${hasCartItems ? "Your Cart" : "Your Cart is Empty!"}`
+      : dialogState === "checkout"
+        ? "Checkout"
+        : "Success!";
 
   return createPortal(
     <dialog
@@ -16,11 +26,7 @@ export default function CartModal({
     >
       <div className="font-raleway text-gray-800 bg-amber-50 p-4 py-6 flex flex-col gap-3 font-medium">
         <h3 className="font-bold font-manrope text-lg text-gray-950">
-            {
-                dialogState === "cart" ? "Your Cart" :
-                dialogState === "checkout" ? "Checkout" :
-                "Success!"
-            }
+          {title}
         </h3>
         {children}
         <div className="self-end mt-8">
@@ -35,13 +41,20 @@ export default function CartModal({
           )}
           <button
             onClick={onDialogStateChange}
-            className="ml-3 bg-linear-to-r from-amber-400/80 to-amber-300 py-1 px-5 rounded-sm shadow-sm cursor-pointer hover:opacity-80 active:opacity-100 font-medium"
+            disabled={!hasCartItems}
+            className="ml-3 bg-linear-to-r from-amber-400/80 to-amber-300 py-1 px-5 rounded-sm shadow-sm cursor-pointer hover:opacity-80 active:opacity-100 font-medium disabled:opacity-60 disabled:cursor-not-allowed "
           >
-            {dialogState === "cart" ? "Go to Checkout" : dialogState === "checkout" ? "Submit Order" : "Okay"}
+            {dialogState === "cart"
+              ? "Go to Checkout"
+              : dialogState === "checkout"
+                ? "Submit Order"
+                : "Okay"}
           </button>
         </div>
       </div>
     </dialog>,
-    document.getElementById('modal')
+    document.getElementById("modal"),
   );
-}
+});
+
+export default CartModal;

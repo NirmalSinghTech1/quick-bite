@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { CartContext } from "../CartContext";
 
 import CartModal from "./CartModal";
 import Cart from "./Cart";
@@ -6,6 +7,7 @@ import Checkout from "./Checkout";
 
 export default function Modal({ modalRef }) {
   const [dialogState, setDialogState] = useState("cart");
+  const { cartItems } = useContext(CartContext);
 
   function handleDialogStateChange() {
     if (dialogState === "cart") {
@@ -24,9 +26,10 @@ export default function Modal({ modalRef }) {
       closeBtn={dialogState !== "success"}
       onDialogStateChange={handleDialogStateChange}
       ref={modalRef}
+      hasCartItems={cartItems.length > 0}
     >
       {dialogState === "cart" ? (
-        <Cart />
+        <Cart cartItems={cartItems} />
       ) : dialogState === "checkout" ? (
         <Checkout />
       ) : (
