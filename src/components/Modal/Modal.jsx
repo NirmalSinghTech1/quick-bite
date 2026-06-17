@@ -5,9 +5,9 @@ import CartModal from "./CartModal";
 import Cart from "./Cart";
 import Checkout from "./Checkout";
 
-export default function Modal({ modalRef }) {
+export default function Modal({ modalRef, totalAmount }) {
   const [dialogState, setDialogState] = useState("cart");
-  const { cartItems } = useContext(CartContext);
+  const { cartItems,removeCartMeal, updateTotalAmount } = useContext(CartContext);
 
   function handleDialogStateChange() {
     if (dialogState === "cart") {
@@ -29,9 +29,14 @@ export default function Modal({ modalRef }) {
       hasCartItems={cartItems.length > 0}
     >
       {dialogState === "cart" ? (
-        <Cart cartItems={cartItems} />
+        <Cart 
+          cartItems={cartItems} 
+          totalAmount={totalAmount}
+          removeCartMeal={removeCartMeal} 
+          updateTotalAmount={updateTotalAmount}
+        />
       ) : dialogState === "checkout" ? (
-        <Checkout />
+        <Checkout totalAmount={totalAmount} />
       ) : (
         <>
           <p>Your order was submitted succesfully!</p>

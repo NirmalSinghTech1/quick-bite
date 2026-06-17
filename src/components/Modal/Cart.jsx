@@ -1,19 +1,29 @@
-export default function Cart({ cartItems }) {
+import CartItem from "./CartItem";
+
+export default function Cart({
+  cartItems,
+  removeCartMeal,
+  totalAmount,
+  updateTotalAmount,
+}) {
   return (
     <>
-      <ul className="font-medium [&>li]:flex [&>li]:items-center [&>li]:justify-between [&>li]:mb-1 [&>li>div>span]:not-nth-2:bg-amber-800 [&>li>div>span]:not-nth-2:rounded-full [&>li>div>span]:not-nth-2:text-amber-200 [&>li>div>span]:not-nth-2:text-lg [&>li>div]:w-20 [&>li>div]:flex [&>li>div]:text-center [&>li>div>span]:flex-1 [&>li>div>span]:cursor-pointer">
+      <ul className="font-medium [&>li]:flex [&>li]:items-center [&>li]:justify-between [&>li]:mb-1 [&>li>div>button]:not-nth-2:bg-amber-800 [&>li>div>button]:not-nth-2:rounded-full [&>li>div>button]:text-amber-200 [&>li>div]:text-lg [&>li>div]:w-20 [&>li>div]:flex [&>li>div]:text-center [&>li>div]:*:flex-1 [&>li>div>button]:cursor-pointer">
         {cartItems.length > 0 ? (
           <>
             {cartItems.map((meal) => (
               <CartItem
                 key={meal.id ?? meal.name}
                 item={meal.name}
-                quantity={1}
+                itemQuantity={1}
                 price={meal.price}
+                id={meal.id}
+                removeCartMeal={removeCartMeal}
+                updateTotalAmount={updateTotalAmount}
               />
             ))}
             <div className="mt-6">
-              <p className="text-right font-semibold">$53.97</p>
+              <p className="text-right font-semibold">${totalAmount}</p>
             </div>
           </>
         ) : (
@@ -24,20 +34,5 @@ export default function Cart({ cartItems }) {
         )}
       </ul>
     </>
-  );
-}
-
-function CartItem({ item, quantity, price }) {
-  return (
-    <li>
-      <p>
-        {item} - {quantity} x ${price}
-      </p>
-      <div>
-        <span>-</span>
-        <span>1</span>
-        <span>+</span>
-      </div>
-    </li>
   );
 }

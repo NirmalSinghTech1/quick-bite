@@ -1,8 +1,8 @@
-export default function Checkout() {
+export default function Checkout({ totalAmount }) {
   return (
     <>
       <p>
-        Total Amount: <span>$89.95</span>
+        Total Amount: <span>${totalAmount}</span>
       </p>
       <form
         method="dialog"

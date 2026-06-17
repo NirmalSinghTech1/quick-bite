@@ -6,7 +6,7 @@ import { FaCartShopping } from "react-icons/fa6";
 import { TiShoppingCart } from "react-icons/ti";
 import { FaXTwitter } from "react-icons/fa6";
 
-export default function Header({ modalRef }) {
+export default function Header({ modalRef, totalCartMeals }) {
   return (
     <header className="flex items-center justify-between pr-10">
       <img
@@ -43,7 +43,12 @@ export default function Header({ modalRef }) {
           </li>
           <li className="flex items-top justify-end gap-2 md:w-32">
             <FaCartShopping style={{ color: "#D2042D" }} />
-            <button onClick={() => modalRef.current.showModal()} className="self-start cursor-pointer">Cart(0)</button>
+            <button
+              onClick={() => modalRef.current.showModal()}
+              className="self-start cursor-pointer"
+            >
+              Cart({totalCartMeals})
+            </button>
           </li>
         </ul>
       </nav>
