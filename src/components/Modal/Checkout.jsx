@@ -1,19 +1,29 @@
-export default function Checkout({ totalAmount }) {
+import ModalButton from "./ModalButton";
+
+export default function Checkout({ totalAmount, checkoutRef, onSubmitOrder }) {
+  function handleFormData(FormData) {
+    const formData = Object.fromEntries(FormData);
+
+    onSubmitOrder(formData);
+  }
+
   return (
-    <>
+    <div>
       <p>
         Total Amount: <span>${totalAmount}</span>
       </p>
       <form
-        method="dialog"
-        className="[&_input]:max-w-sm [&_input]:p-1 [&_input]:pl-2 [&_input]:rounded-sm [&_input]:focus:outline-amber-400 [&_label]:font-bold [&_input]:bg-amber-200/60 [&_input]:shadow-sm [&_input]:invalid:outline-red-500 flex flex-col gap-2 w-full"
+        action={handleFormData}
+        className="[&_input]:max-w-sm [&_input]:p-1 [&_input]:pl-2 [&_input]:rounded-sm [&_input]:focus:outline-amber-400 [&_label]:font-bold [&_input]:bg-amber-200/60 [&_input]:shadow-sm [&_input]:invalid:outline-red-500 flex flex-col gap-2 w-full mt-4"
       >
-        <label htmlFor="fullName">Full Name</label>
+        <label htmlFor="name">Full Name</label>
         <input
           type="text"
-          name="fullName"
-          id="fullName"
+          name="name"
+          id="name"
           autoComplete="off"
+          value="abhi"
+          minLength="3"
           required
         />
 
@@ -22,6 +32,7 @@ export default function Checkout({ totalAmount }) {
           type="text"
           name="email"
           id="email"
+          value="example@abc.com"
           autoComplete="off"
           required
         />
@@ -40,7 +51,7 @@ export default function Checkout({ totalAmount }) {
             <label htmlFor="postalCode">Postal Code</label>
             <input
               type="text"
-              name="postalCode"
+              name="postal-code"
               id="postalCode"
               autoComplete="off"
               required
@@ -59,7 +70,17 @@ export default function Checkout({ totalAmount }) {
             />
           </div>
         </div>
+        <div className="text-right mt-8">
+          <button
+            className="cursor-pointer hover:text-shadow-sm font-medium"
+            type="button"
+            onClick={() => checkoutRef.current.close()}
+          >
+            Close
+          </button>
+          <ModalButton text="Submit Order" type="submit" />
+        </div>
       </form>
-    </>
+    </div>
   );
 }

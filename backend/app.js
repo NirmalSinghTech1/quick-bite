@@ -5,6 +5,7 @@ import express from 'express';
 
 const app = express();
 
+// app.use(express.json()); 
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
@@ -22,7 +23,7 @@ app.get('/meals', async (req, res) => {
 
 app.post('/orders', async (req, res) => {
   const orderData = req.body.order;
-
+  console.log('order', orderData)
   if (orderData === null || orderData.items === null || orderData.items.length === 0) {
     return res
       .status(400)
@@ -54,7 +55,7 @@ app.post('/orders', async (req, res) => {
   const orders = await fs.readFile('./data/orders.json', 'utf8');
   const allOrders = JSON.parse(orders);
   allOrders.push(newOrder);
-  await fs.writeFile('./data/orders.json', JSON.stringify(allOrders));
+  await fs.writeFile('./data/orders.json', JSON.stringify(allOrders, null, 2));
   res.status(201).json({ message: 'Order created!' });
 });
 

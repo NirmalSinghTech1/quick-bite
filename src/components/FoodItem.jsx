@@ -17,22 +17,24 @@ export default function FoodItem({ meal }) {
   }
   return (
     <article
-      className={`flex flex-col justify-self-center w-full max-w-77 max-h-140 rounded-2xl text-center transition-all duration-200 shadow-lg hover:drop-shadow-[0px_0px_3px_${itemIsAdded ? "#05df72" : "#FFBF0050"},0px_0px_7px_${itemIsAdded ? "#05df72" : "#FFBF00"}] ${itemIsAdded ? "drop-shadow-[0_0_3px_#05df72,0_0_7px_#05df72]" : ""}`}
+      className={`flex flex-col justify-self-center w-full max-w-77 max-h-140 rounded-2xl text-center transition-all duration-200 shadow-lg ${itemIsAdded && "drop-shadow-[0_0_3px_#05df72,0_0_7px_#05df72]"} ${itemIsAdded ? 'hover:drop-shadow-[0_0_3px_#05df72,0_0_7px_#05df72]' : 'hover:drop-shadow-[0_0_3px_#FFBF00,0_0_7px_#FFBF00]'}`}
     >
       <img
         src={`http://localhost:3000/${image}`}
         alt={name + "image"}
         className="w-full h-70 rounded-tl-2xl rounded-tr-2xl object-cover aspect-3/4"
       />
-      <div className="flex-1 p-3 mx-auto rounded-bl-2xl rounded-br-2xl bg-linear-to-b from-black to-gray-900">
-        <h3 className="text-2xl font-semibold">{name}</h3>
+      <div className="flex-1 flex flex-col items-center p-3 mx-auto rounded-bl-2xl rounded-br-2xl bg-linear-to-b from-black to-gray-900 h-full">
+        <h3 className="text-xl font-semibold">{name}</h3>
         <span className="font-raleway bg-amber-300/20 text-yellow-300 text-xl font-semibold w-25 py-0.5 my-3 inline-block rounded-sm shadow-lg tracking-wide">
           ${price}
         </span>
-        <p className="text-md">{description}</p>
+        <div className="block mb-4">
+          <p className="text-md">{description}</p>
+        </div>
         <button
           onClick={handleClick}
-          className={`my-3 ${itemIsAdded ? "bg-green-500 hover:bg-green-600" : "bg-amber-400 hover:bg-amber-500"} text-gray-900 w-35 py-2 rounded-md shadow-xl cursor-pointer transition-all duration-300 active:scale-95 font-medium`}
+          className={`mt-auto mb-3 ${itemIsAdded ? "bg-green-500 hover:bg-green-600" : "bg-amber-400 hover:bg-amber-500"} text-gray-900 w-35 py-2 rounded-md shadow-xl cursor-pointer transition-all duration-300 active:scale-95 font-medium`}
         >
           {itemIsAdded ? "Added to Cart!" : "Add to Cart"}
         </button>

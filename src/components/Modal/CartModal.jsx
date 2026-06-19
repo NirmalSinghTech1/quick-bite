@@ -1,23 +1,7 @@
 import { forwardRef } from "react";
 import { createPortal } from "react-dom";
 
-const CartModal = forwardRef(function CartModal(
-  {
-    children,
-    dialogState,
-    closeBtn = false,
-    onDialogStateChange,
-    hasCartItems,
-  },
-  ref,
-) {
-  const title =
-    dialogState === "cart"
-      ? `${hasCartItems ? "Your Cart" : "Your Cart is Empty!"}`
-      : dialogState === "checkout"
-        ? "Checkout"
-        : "Success!";
-
+const CartModal = forwardRef(function CartModal({ children, title }, ref) {
   return createPortal(
     <dialog
       id="cart-modal"
@@ -29,28 +13,6 @@ const CartModal = forwardRef(function CartModal(
           {title}
         </h3>
         {children}
-        <div className="self-end mt-8">
-          {closeBtn && (
-            <button
-              commandfor="cart-modal"
-              command="close"
-              className="cursor-pointer hover:text-shadow-sm font-medium"
-            >
-              Close
-            </button>
-          )}
-          <button
-            onClick={onDialogStateChange}
-            disabled={!hasCartItems}
-            className="ml-3 bg-linear-to-r from-amber-400/80 to-amber-300 py-1 px-5 rounded-sm shadow-sm cursor-pointer hover:opacity-80 active:opacity-100 font-medium disabled:opacity-60 disabled:cursor-not-allowed "
-          >
-            {dialogState === "cart"
-              ? "Go to Checkout"
-              : dialogState === "checkout"
-                ? "Submit Order"
-                : "Okay"}
-          </button>
-        </div>
       </div>
     </dialog>,
     document.getElementById("modal"),

@@ -8,49 +8,78 @@ import Modal from "./components/Modal/Modal";
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const modalRef = useRef(null);
+  const cartModalRef = useRef(null);
+
+  const totalAmount = Number(
+    cartItems
+      .reduce((sum, item) => sum + item.price * item.quantity, 0)
+      .toFixed(2),
+  );
 
   function addMealToCart(meal) {
-    setCartItems((prevItems) => [...prevItems, meal]);
-    setTotalAmount((prevAmount) => +(prevAmount + +meal.price).toFixed(2));
-  }
-
-  function handleRemoveMeal(id) {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  }
-
-  function updateTotalAmount(action, amount) {
-    setTotalAmount((prevAmount) => {
-      if (action === "add") {
-        const total = prevAmount + +amount;
-        return +total.toFixed(2);
+    setCartItems((prevItems) => {
+      const item = prevItems.find((item) => item.id === meal.id);
+      if (!item) {
+        return [...prevItems, { ...meal, quantity: 1 }];
       }
 
-      if (action === "remove") {
-        const total = prevAmount - +amount;
-        return +total.toFixed(2);
-      }
-
-      return prevAmount;
+      return prevItems.map((item) =>
+        item.id === meal.id ? { ...item, quantity: item.quantity + 1 } : item,
+      );
     });
+  }
+
+  function addQuantity(id) {
+    setCartItems((prevItems) => {
+      const item = prevItems.find((item) => item.id === id);
+      if (!item) return prevItems;
+
+      const updatedItems = prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+      );
+
+      return updatedItems;
+    });
+  }
+
+  function removeQuantity(id) {
+    setCartItems((prevItems) => {
+      const item = prevItems.find((item) => item.id === id);
+      if (!item) return prevItems;
+
+      if (item.quantity <= 1) {
+        return prevItems.filter((item) => item.id !== id);
+      }
+
+      const updatedItems = prevItems.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+      );
+      return updatedItems;
+    });
+  }
+
+  function handleUpdateQuantity(id, action) {
+    if (action === "add") return addQuantity(id);
+    if (action === "remove") return removeQuantity(id);
   }
 
   return (
     <>
-      <CartContext
+      <CartContext.Provider
         value={{
           cartItems,
           addMealToCart,
-          removeCartMeal: handleRemoveMeal,
-          updateTotalAmount,
+          onUpdateQuantity: handleUpdateQuantity,
         }}
       >
-        <Modal modalRef={modalRef} totalAmount={totalAmount} />
-        <LandingSection modalRef={modalRef} totalCartMeals={cartItems.length} />
+        <Modal cartModalRef={cartModalRef} totalAmount={totalAmount} />
+        <LandingSection
+          modalRef={cartModalRef}
+          totalCartMeals={cartItems.length}
+        />
         <Meals />
         <Footer />
-      </CartContext>
+      </CartContext.Provider>
     </>
   );
 }

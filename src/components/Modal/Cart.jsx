@@ -1,10 +1,11 @@
 import CartItem from "./CartItem";
+import ModalButton from "./ModalButton";
 
 export default function Cart({
   cartItems,
-  removeCartMeal,
   totalAmount,
-  updateTotalAmount,
+  onUpdateQuantity,
+  onToggleModal,
 }) {
   return (
     <>
@@ -15,11 +16,10 @@ export default function Cart({
               <CartItem
                 key={meal.id ?? meal.name}
                 item={meal.name}
-                itemQuantity={1}
+                itemQuantity={meal.quantity}
                 price={meal.price}
                 id={meal.id}
-                removeCartMeal={removeCartMeal}
-                updateTotalAmount={updateTotalAmount}
+                onUpdateQuantity={onUpdateQuantity}
               />
             ))}
             <div className="mt-6">
@@ -32,6 +32,20 @@ export default function Cart({
             something delicious!
           </p>
         )}
+        <div className="text-right mt-8">
+          <button
+            commandfor="cart-modal"
+            command="close"
+            className="cursor-pointer hover:text-shadow-sm font-medium"
+          >
+            Close
+          </button>
+          <ModalButton
+            text="Go to Checkout"
+            onClick={onToggleModal}
+            disabled={!cartItems.length}
+          />
+        </div>
       </ul>
     </>
   );
