@@ -106,9 +106,6 @@ http://localhost:5173
 ### Menu Section
 ![Quick Bite Menu](./website-screenshots/menu.png)
 
-## Live Preview 
-[Quick Bite](https://nirmalsinghtech1.github.io/quick-bite/)
-
 ## Connect With Me 
 
 [LinkedIn](https://www.linkedin.com/in/nirmal-singh-5005b92b2)
