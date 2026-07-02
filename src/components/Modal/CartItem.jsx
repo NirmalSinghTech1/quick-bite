@@ -1,19 +1,16 @@
-export default function CartItem({
-  item,
-  itemQuantity,
-  price,
-  id,
-  onUpdateQuantity,
-}) {
+import { currencyFormatter } from "../../utils/formatter.js";
+
+export default function CartItem({ meal, addMealToCart, removeMeal }) {
+  const { id, name, quantity, price } = meal;
   return (
     <li>
       <p>
-        {item} - {itemQuantity} x ${price}
+        {name} - {quantity} x {currencyFormatter.format(price)}
       </p>
       <div>
-        <button onClick={() => onUpdateQuantity(id, "remove")}>-</button>
-        <span>{itemQuantity}</span>
-        <button onClick={() => onUpdateQuantity(id, "add")}>+</button>
+        <button onClick={() => removeMeal(id)}>-</button>
+        <span>{quantity}</span>
+        <button onClick={() => addMealToCart(meal)}>+</button>
       </div>
     </li>
   );

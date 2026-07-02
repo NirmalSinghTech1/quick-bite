@@ -1,96 +1,50 @@
-import { useContext, useRef } from "react";
-import { CartContext } from "../CartContext";
+import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
-import CartModal from "./CartModal";
-import Cart from "./Cart";
-import Checkout from "./Checkout";
+function Modal({ open, children, title, onClose }) {
+  const dialogRef = useRef(null);
 
-export default function Modal({ cartModalRef, totalAmount }) {
-  const { cartItems, onUpdateQuantity } = useContext(CartContext);
-  const checkoutModalRef = useRef(null);
-  
-  function handleToggleModal() {
-    if (cartModalRef.current) {
-      cartModalRef.current.close();
-    }
+  useEffect(() => {
+    const modal = dialogRef.current;
+    if (!modal) return;
 
-    if (checkoutModalRef.current) {
-      checkoutModalRef.current.showModal();
-    }
-  }
-  const handleSubmitOrder = async (customerData) => {
-    try {
-      const url = "http://localhost:3000/orders";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          order: {
-            customer: customerData,
-            items: cartItems,
-          },
-        }),
-      });
+    if (open) {
+      if (!modal.open) {
+        modal.showModal();
 
-      if (!response.ok) {
-        throw new Error(`HTTP Error! status: ${response.status}`);
+        document.body.style.overflow = "hidden";
       }
-    } catch (err) {
-      console.error(err);
     }
+
+    return () => {
+      document.body.style.overflow = "unset";
+      modal.close();
+    };
+  }, [open]);
+
+  const handleCancel = (event) => {
+    event.preventDefault();
+
+    onClose();
   };
 
-  return (
-    <>
-      <CartModal
-        ref={cartModalRef}
-        title={cartItems.length > 0 ? "Your Cart" : "Your Cart is empty!"}
-      >
-        <Cart
-          cartItems={cartItems}
-          totalAmount={totalAmount}
-          onUpdateQuantity={onUpdateQuantity}
-          onToggleModal={handleToggleModal}
-        />
-      </CartModal>
-      <CartModal ref={checkoutModalRef} title="Checkout">
-        <Checkout
-          totalAmount={totalAmount}
-          checkoutRef={checkoutModalRef}
-          onSubmitOrder={handleSubmitOrder}
-        />
-      </CartModal>
-    </>
+  return createPortal(
+    <dialog
+      id="cart-modal"
+      ref={dialogRef}
+      onClose={onClose}
+      onCancel={handleCancel}
+      className="fixed m-auto inset-0 w-lg rounded-lg backdrop:bg-black/50 animate-[SlideIn_0.4s_ease-out]"
+    >
+      <div className="font-raleway text-gray-800 bg-amber-50 p-4 py-6 flex flex-col gap-3 font-medium">
+        <h3 className="font-bold font-manrope text-lg text-gray-950">
+          {title}
+        </h3>
+        {children}
+      </div>
+    </dialog>,
+    document.getElementById("modal"),
   );
 }
-// <CartModal
-//   dialogState={dialogState}
-//   closeBtn={dialogState !== "success"}
-//   onDialogStateChange={handleDialogStateChange}
-//   ref={modalRef}
-//   hasCartItems={cartItems.length > 0}
-//   onResetState={handleResetDialogState}
-// >
-//   {}
-// </CartModal>
 
-// {dialogState === "cart" ? (
-//   <Cart
-//     cartItems={cartItems}
-//     totalAmount={totalAmount}
-//     removeCartMeal={removeCartMeal}
-//     updateTotalAmount={updateTotalAmount}
-//   />
-// ) : dialogState === "checkout" ? (
-//   <Checkout totalAmount={totalAmount} />
-// ) : (
-//   <>
-//     <p>Your order was submitted succesfully!</p>
-//     <p>
-//       We will get back to you with more details via email within the next
-//       few minutes.
-//     </p>
-//   </>
-// )}
+export default Modal;
